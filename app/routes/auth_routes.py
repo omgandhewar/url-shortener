@@ -1,5 +1,5 @@
-from flask import Flask, request, Blueprint
-from flask_jwt_extended import jwt_required
+from flask import Flask, request, jsonify, Blueprint
+from flask_jwt_extended import jwt_required, set_access_cookies
 from app.services.auth_service import user_signup, login_user, user_logout, user_refreshtoken
 
 
@@ -13,7 +13,18 @@ def signup():
 @auth_bp.route("/login",methods=["GET","POST"])
 def login():
     print("LOGIN ROUTE HIT")
-    return login_user(request.get_json())
+    result=login_user(request.get_json())
+    
+    if not result["success"]:
+         return jsonify(result),401
+     
+    response=jsonify({
+        "message":result["message"]
+    })
+    
+    set_access_cookies(response, result["token"])
+    
+    return response
 
 @auth_bp.route("/refresh",methods=["POST"])
 @jwt_required(refresh=True)

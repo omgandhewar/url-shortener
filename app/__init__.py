@@ -1,5 +1,6 @@
 from flask import Flask
 from datetime import timedelta
+from flask_cors import CORS
 from app.flaskextension import bcrypt, jwt
 from app.routes.auth_routes import auth_bp
 from app.routes.url_shortenroutes import urlshorten_bp
@@ -19,6 +20,11 @@ def create_app():
     
     jwt.init_app(app)
     bcrypt.init_app(app)
+    CORS(
+        app,
+        supports_credentials=True,
+        origins=["http://127.0.0.1:5500"]
+    )
     
     app.register_blueprint(auth_bp)
     app.register_blueprint(urlshorten_bp)

@@ -46,6 +46,7 @@ def login_user(data):
     
     if not email or not password:
         return{
+            "success":False,
             "mesasge":"email and password are required"
         }
     
@@ -56,6 +57,7 @@ def login_user(data):
     
     if not user_obj:
         return{
+            "success":False,
             "message":"Invalid email"
         },422
         
@@ -63,6 +65,7 @@ def login_user(data):
         
     if not bcrypt.check_password_hash(hashed_password,password):
         return{
+            "success":False,
             "message":"Invalid password"
         },422
         
@@ -71,7 +74,8 @@ def login_user(data):
     refresh_token=create_refresh_token(identity=email)
     
     return{
-        "meaagse":"login succesfully",
+        "success":True,
+        "message":"login succesfully",
         "token":token,
         "refresh_token":refresh_token
     }      
