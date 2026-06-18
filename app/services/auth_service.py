@@ -49,7 +49,7 @@ def login_user(data):
             "mesasge":"email and password are required"
         }
     
-    sql="SELECT email,password FROM users WHERE email=%s"
+    sql="SELECT id,email,password FROM users WHERE email=%s"
     cursor.execute(sql,(email,))
     
     user_obj=cursor.fetchone()
@@ -59,7 +59,7 @@ def login_user(data):
             "message":"Invalid email"
         },422
         
-    hashed_password=user_obj[1]
+    hashed_password=user_obj[2]
         
     if not bcrypt.check_password_hash(hashed_password,password):
         return{
@@ -67,7 +67,7 @@ def login_user(data):
         },422
         
         
-    token=create_access_token(identity=email)
+    token=create_access_token(identity=str(user_obj[0]))
     refresh_token=create_refresh_token(identity=email)
     
     return{

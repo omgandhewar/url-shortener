@@ -10,7 +10,7 @@ auth_bp=Blueprint("auth",__name__)
 def signup():
     return user_signup(request.get_json())
 
-@auth_bp.route("/login",methods=["POST"])
+@auth_bp.route("/login",methods=["GET","POST"])
 def login():
     print("LOGIN ROUTE HIT")
     return login_user(request.get_json())
