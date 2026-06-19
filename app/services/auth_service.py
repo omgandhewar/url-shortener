@@ -19,6 +19,7 @@ def user_signup(data):
     
     if user_obj:
         return{
+            "success":False,
             "message":"user already exists"
         }
     
@@ -32,6 +33,7 @@ def user_signup(data):
     db.commit()
     
     return{
+        "success":True,
         "message":"user added successfully"
     }
     
