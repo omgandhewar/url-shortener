@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_jwt_extended import get_jwt_identity
 from app.db.database import get_db
+from urllib import urlparse
 import random
 import string
 
@@ -16,6 +17,15 @@ def url_shorten(data):
     current_user=get_jwt_identity()
     
     original_url=data["url"]
+    
+    parsed=urlparse(original_url)
+    
+    if not parsed.scehma or not parsed.netloc:
+        return {
+        "success":False,
+        "message": "Invalid URL"
+    }
+    
     code=generate_code()
     
     sql="INSERT INTO Shorten_url(user_id,short_url,Original_url) VALUES(%s,%s,%s)"
@@ -26,6 +36,7 @@ def url_shorten(data):
     db.commit()
     
     return{
+        "success":True,
         "message":"url added successfully"
     }
     
